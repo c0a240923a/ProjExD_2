@@ -3,6 +3,7 @@ import sys
 import pygame as pg
 import random
 import time
+import math
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -139,7 +140,11 @@ def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]
     orgから見て、dstがどこにあるのかを計算し、
     方向ベクトルをタプルで返す
     """
-    
+    v1 = dst - org
+    norm = math.sqrt(v1[0]^2+v1[1]^2)
+    u1 = v1 / norm
+    u2 = u1 * math.sqrt(50)
+    norm2 = u2^2 / 2
     return current_xy
 
 
