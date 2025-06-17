@@ -2,6 +2,7 @@ import os
 import sys
 import pygame as pg
 import random
+import time
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -31,6 +32,7 @@ def main():
             if event.type == pg.QUIT: 
                 return
         if kk_rct.colliderect(bb_rct):
+            gameover(screen)
             return
         screen.blit(bg_img, [0, 0]) 
         key_lst = pg.key.get_pressed()
@@ -41,7 +43,7 @@ def main():
                 sum_mv[1] += mv[1]
 
         kk_rct.move_ip(sum_mv)
-        bb_rct.move_ip(vx, vy)
+        #bb_rct.move_ip(vx, vy)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         yoko, tate = check_bound(bb_rct)
@@ -68,6 +70,26 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+def gameover(screen: pg.Surface) -> None:
+    """
+    ゲームオーバー時に半透明の黒い画面上に「Game Over」と表示し、
+    泣いているこうかとん画像を張り付ける関数
+    """
+    fin_img = pg.Surface((WIDTH, HEIGHT))
+    pg.draw.rect(fin_img, (0, 0, 0), (0, 0, WIDTH, HEIGHT), 0)
+    fin_img.set_alpha(128)
+    screen.blit(fin_img, [0, 0])
+
+    kk2_img = pg.image.load("fig/8.png")
+    screen.blit(kk2_img, [320, 300])
+    screen.blit(kk2_img, [750, 300])
+
+    fonto = pg.font.Font(None, 80)
+    txt = fonto.render("Game Over", True, (255, 255, 255))
+    screen.blit(txt, [400, 300])
+    
+    pg.display.update()
+    time.sleep(5)
 
 if __name__ == "__main__":
     pg.init()
