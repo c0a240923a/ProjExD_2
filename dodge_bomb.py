@@ -42,11 +42,12 @@ def main():
         kk_rct.move_ip(sum_mv)
 
         bb_imgs, bb_accs = init_bb_imgs()
+        vx, vy = calc_orientation(bb_rct, kk_rct, (vx, vy))
         avx = vx*bb_accs[min(tmr//500, 9)]
         avy = vy*bb_accs[min(tmr//500, 9)]
         bb_img = bb_imgs[min(tmr//500, 9)]
         bb_img.set_colorkey((0, 0, 0))
-        bb_rct.move_ip(avx, avy)
+        #bb_rct.move_ip(avx, avy)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         yoko, tate = check_bound(bb_rct)
@@ -115,21 +116,31 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
 
 
 def get_kk_img(sum_mv: tuple[int, int]) -> pg.Surface:
-    #kk_img = pg.image.load("fig/3.png")
-    kk_img = {(0, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9),
-                (0, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 270, 0.9),
-               (+5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 225, 0.9), 
-               (+5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 180, 0.9), 
-               (+5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 135, 0.9), 
-               (0, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 0.9), 
-               (-5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 0.9), 
-               (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9), 
-               (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 315, 0.9),
+    """
+    移動量の合計値タプルに対応する向きの画像Surfaceを返す
+    """
+    kk_img = pg.image.load("fig/3.png")
+    kk_img = {(0, 0): pg.transform.rotozoom(kk_img, 0, 0.9),
+                (0, -5): pg.transform.flip(pg.transform.rotozoom(kk_img, 270, 0.9), True, False),
+               (+5, -5): pg.transform.flip(pg.transform.rotozoom(kk_img, 135, 0.9), False, True), 
+               (+5, 0): pg.transform.flip(pg.transform.rotozoom(kk_img, 180, 0.9), False, True), 
+               (+5, +5): pg.transform.flip(pg.transform.rotozoom(kk_img, 225, 0.9), False, True), 
+               (0, +5): pg.transform.flip(pg.transform.rotozoom(kk_img, 90, 0.9), True, False), 
+               (-5, +5): pg.transform.rotozoom(kk_img, 45, 0.9), 
+               (-5, 0): pg.transform.rotozoom(kk_img, 360, 0.9), 
+               (-5, -5): pg.transform.rotozoom(kk_img, 315, 0.9),
                }
     kk_img = kk_img[sum_mv]
-    
-    #kk_img = pg.transform.flip(kk_img, True, True)
     return kk_img
+
+
+def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]) -> tuple[float, float]:
+    """
+    orgから見て、dstがどこにあるのかを計算し、
+    方向ベクトルをタプルで返す
+    """
+    
+    return current_xy
 
 
 if __name__ == "__main__":
