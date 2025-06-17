@@ -122,14 +122,22 @@ def get_kk_img(sum_mv: tuple[int, int]) -> pg.Surface:
     """
     kk_img = pg.image.load("fig/3.png")
     kk_img = {(0, 0): pg.transform.rotozoom(kk_img, 0, 0.9),
-                (0, -5): pg.transform.flip(pg.transform.rotozoom(kk_img, 270, 0.9), True, False),
-               (+5, -5): pg.transform.flip(pg.transform.rotozoom(kk_img, 135, 0.9), False, True), 
-               (+5, 0): pg.transform.flip(pg.transform.rotozoom(kk_img, 180, 0.9), False, True), 
-               (+5, +5): pg.transform.flip(pg.transform.rotozoom(kk_img, 225, 0.9), False, True), 
-               (0, +5): pg.transform.flip(pg.transform.rotozoom(kk_img, 90, 0.9), True, False), 
-               (-5, +5): pg.transform.rotozoom(kk_img, 45, 0.9), 
-               (-5, 0): pg.transform.rotozoom(kk_img, 360, 0.9), 
-               (-5, -5): pg.transform.rotozoom(kk_img, 315, 0.9),
+                (0, -5): 
+                pg.transform.flip(pg.transform.rotozoom(kk_img, 270, 0.9), True, False),
+               (+5, -5): 
+               pg.transform.flip(pg.transform.rotozoom(kk_img, 135, 0.9), False, True), 
+               (+5, 0): 
+               pg.transform.flip(pg.transform.rotozoom(kk_img, 180, 0.9), False, True), 
+               (+5, +5): 
+               pg.transform.flip(pg.transform.rotozoom(kk_img, 225, 0.9), False, True), 
+               (0, +5): 
+               pg.transform.flip(pg.transform.rotozoom(kk_img, 90, 0.9), True, False), 
+               (-5, +5): 
+               pg.transform.rotozoom(kk_img, 45, 0.9), 
+               (-5, 0): 
+               pg.transform.rotozoom(kk_img, 360, 0.9), 
+               (-5, -5): 
+               pg.transform.rotozoom(kk_img, 315, 0.9),
                }
     kk_img = kk_img[sum_mv]
     return kk_img
@@ -140,11 +148,11 @@ def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]
     orgから見て、dstがどこにあるのかを計算し、
     方向ベクトルをタプルで返す
     """
-    v1 = dst - org
-    norm = math.sqrt(v1[0]^2+v1[1]^2)
-    u1 = v1 / norm
-    u2 = u1 * math.sqrt(50)
-    norm2 = u2^2 / 2
+    #v1 = dst - org
+    #norm = math.sqrt(v1[0]^2+v1[1]^2)
+    #u1 = v1 / norm
+    #u2 = u1 * math.sqrt(50)
+    #norm2 = u2^2 / 2
     return current_xy
 
 
