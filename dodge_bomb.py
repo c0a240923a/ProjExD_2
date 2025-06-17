@@ -14,7 +14,7 @@ def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
-    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
+    kk_img = get_kk_img((0, 0))
     bb_img = pg.Surface((20, 20))
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
@@ -54,6 +54,8 @@ def main():
             vx *= -1
         if not tate:
             vy *= -1
+
+        kk_img = get_kk_img(tuple(sum_mv))
 
         screen.blit(kk_img, kk_rct)
         screen.blit(bb_img, bb_rct)
@@ -110,6 +112,24 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
         bb_imgs.append(bb_img)
     return tuple(bb_imgs), tuple(bb_accs)
+
+
+def get_kk_img(sum_mv: tuple[int, int]) -> pg.Surface:
+    #kk_img = pg.image.load("fig/3.png")
+    kk_img = {(0, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9),
+                (0, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 270, 0.9),
+               (+5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 225, 0.9), 
+               (+5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 180, 0.9), 
+               (+5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 135, 0.9), 
+               (0, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 0.9), 
+               (-5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 0.9), 
+               (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9), 
+               (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 315, 0.9),
+               }
+    kk_img = kk_img[sum_mv]
+    
+    #kk_img = pg.transform.flip(kk_img, True, True)
+    return kk_img
 
 
 if __name__ == "__main__":
