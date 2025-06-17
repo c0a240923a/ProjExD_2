@@ -7,8 +7,6 @@ import random
 WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 DELTA = {pg.K_UP: (0, -5), pg.K_DOWN: (0, +5), pg.K_LEFT: (-5, 0), pg.K_RIGHT: (+5, 0),}
-x = random.randrange(1100)
-y = random.randrange(650)
 
 
 def main():
@@ -22,15 +20,17 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
     bb_rct = bb_img.get_rect()
-    bb_rct.center = x, y
+    bb_rct.centerx = random.randint(0, WIDTH)
+    bb_rct.centery = random.randint(0, HEIGHT)
     clock = pg.time.Clock()
     tmr = 0
+    vx = +5
+    vy = +5
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
-
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for key, mv in DELTA.items():
@@ -38,16 +38,33 @@ def main():
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
 
-        vx = +5
-        vy = +5
-        
         kk_rct.move_ip(sum_mv)
         bb_rct.move_ip(vx, vy)
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+        yoko, tate = check_bound(bb_rct)
+        if not yoko:
+            vx *= -1
+        if not tate:
+            vy *= -1
         screen.blit(kk_img, kk_rct)
         screen.blit(bb_img, bb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
+def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
+    """
+    引数：こうかとんRect or 爆弾Rect
+    戻り値：タプル（横方向判定結果、縦方向判定結果）
+    画面内ならTrue、画面外ならFalse
+    """
+    yoko, tate = True, True
+    if obj_rct.left < 0 or WIDTH < obj_rct.right:
+        yoko = False
+    if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
+        tate = False
+    return yoko, tate
 
 
 if __name__ == "__main__":
